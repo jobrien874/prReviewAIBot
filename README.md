@@ -11,7 +11,7 @@ npm install
 # Run the bot
 npm start
 ```
-
+test
 ## Docker
 
 ```sh
