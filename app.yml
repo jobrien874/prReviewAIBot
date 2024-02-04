@@ -1,7 +1,10 @@
 default_events:
+  - issues
   - pull_request
-default_permissions:
+  - pull_request_review
+  default_permissions:
+  issues: write
   metadata: read
   pull_requests: write
-description: A silly pull request bot!
-public: true
+  description: A Put Request Review Bot
+  public: true
