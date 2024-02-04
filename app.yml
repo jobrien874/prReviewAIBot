@@ -7,4 +7,3 @@ default_events:
   metadata: read
   pull_requests: write
   description: A Put Request Review Bot
-  public: true
