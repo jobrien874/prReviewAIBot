@@ -42,7 +42,7 @@ module.exports = (app) => {
 
         app.log.info("reached here 2");
 
-        console.log(filesNames);
+        app.log.info(filesNames);
       }
   
       if (context.payload.pull_request.title.indexOf('🤖') > -1) {
