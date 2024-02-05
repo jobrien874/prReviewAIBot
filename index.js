@@ -9,7 +9,7 @@ module.exports = (app) => {
   app.log.info("Yay, the app was loaded!");
 
   app.on(
-    ["pull_request.opened", "pull_request.synchronize"],
+    ["pull_request.opened", "pull_request.synchronize", "pull_request.edited", "pull_request.reopened"],
     async (context) => {
       const respositoryInfo = context.repo();
 
