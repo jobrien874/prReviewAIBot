@@ -20,7 +20,7 @@ module.exports = (app) => {
         head: context.payload.pull_request.head.sha,
       });
 
-      console.log(data, 'hello this is a test');
+      app.log.info(data, 'hello this is a test');
 
       let { files: changedFiles, commits } = data.data;
   
