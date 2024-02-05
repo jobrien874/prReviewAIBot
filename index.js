@@ -2,7 +2,7 @@
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
-import { Chat } from './chat.js';
+// import { Chat } from './chat.js';
 
 module.exports = (app) => {
   // Your code here
