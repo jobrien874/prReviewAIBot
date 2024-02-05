@@ -16,7 +16,7 @@ npm start
 
 ```sh
 # 1. Build container
-docker build -t pr-review-bot .
+docker build -t pr-review-bot .asdasdasds
 
 # 2. Start container
 docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> pr-review-bot
