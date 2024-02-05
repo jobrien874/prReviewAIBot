@@ -45,15 +45,10 @@ module.exports = (app) => {
       }
   
       if (context.payload.pull_request.title.indexOf('🤖') > -1) {
-        await context.octokit.pulls.createReviewComment({
-          repo: respositoryInfo.repo,
-          owner: respositoryInfo.owner,
-          pull_number: context.pullRequest().pull_number,
-          commit_id: commits[commits.length - 1].sha,
-          path: file.filename,
-          body: res,
-          position: patch.split('\n').length - 1,
-        });
+        await context.octokit.pulls.createReview({
+          ...context.pullRequest(),
+          event: 'APPROVE'
+        })
       }
     }
   );
