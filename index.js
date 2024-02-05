@@ -19,10 +19,10 @@ module.exports = (app) => {
         base: context.payload.pull_request.base.sha,
         head: context.payload.pull_request.head.sha,
       });
-
+      
       let { files: changedFiles, commits } = data.data;
 
-      if (context.payload.action === 'synchronize' && commits.length >= 2) {
+      if (context.payload.action === 'synchronize') {
         const {
           data: { files },
         } = await context.octokit.repos.compareCommits({
@@ -40,6 +40,7 @@ module.exports = (app) => {
             !ignoreList.includes(file.filename)
         );
 
+        app.log.info("reached here 2");
 
         console.log(filesNames);
       }
