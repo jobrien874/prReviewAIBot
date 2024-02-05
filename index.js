@@ -20,9 +20,29 @@ module.exports = (app) => {
         head: context.payload.pull_request.head.sha,
       });
 
-      app.log.info(data, 'hello this is a test');
-
       let { files: changedFiles, commits } = data.data;
+
+      if (context.payload.action === 'synchronize' && commits.length >= 2) {
+        const {
+          data: { files },
+        } = await context.octokit.repos.compareCommits({
+          owner: repo.owner,
+          repo: repo.repo,
+          base: commits[commits.length - 2].sha,
+          head: commits[commits.length - 1].sha,
+        });
+
+        
+        const filesNames = files?.map((file) => file.filename) || [];
+        changedFiles = changedFiles?.filter(
+          (file) =>
+            filesNames.includes(file.filename) &&
+            !ignoreList.includes(file.filename)
+        );
+
+
+        app.log.info(filesNames);
+      }
   
       if (context.payload.pull_request.title.indexOf('🤖') > -1) {
         await context.octokit.pulls.createReviewComment({
