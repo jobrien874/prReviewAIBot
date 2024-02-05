@@ -15,7 +15,7 @@ npm start
 ## Docker
 
 ```sh
-# 1. Build container
+# 1. Build containersdfdf
 docker build -t pr-review-bot .
 
 # 2. Start container
