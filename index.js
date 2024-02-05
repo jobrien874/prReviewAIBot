@@ -26,8 +26,8 @@ module.exports = (app) => {
         const {
           data: { files },
         } = await context.octokit.repos.compareCommits({
-          owner: repo.owner,
-          repo: repo.repo,
+          owner: respositoryInfo.owner,
+          repo: respositoryInfo.repo,
           base: commits[commits.length - 2].sha,
           head: commits[commits.length - 1].sha,
         });
