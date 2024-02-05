@@ -41,7 +41,7 @@ module.exports = (app) => {
         );
 
 
-        app.log.info(filesNames);
+        console.log(filesNames);
       }
   
       if (context.payload.pull_request.title.indexOf('🤖') > -1) {
