@@ -2,7 +2,9 @@
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
-// import { Chat } from './chat.js';
+
+const { Chat } = require('./chat');
+
 
 module.exports = (app) => {
   // Your code here
@@ -43,11 +45,39 @@ module.exports = (app) => {
 
         app.log.info(filesNames);
 
-        await context.octokit.pulls.createReview({
-          ...context.pullRequest(),
-          event: 'APPROVE',
-          body: filesNames.join('\n')
-        })
+        for (let i = 0; i < changedFiles.length; i++) {
+          const file = changedFiles[i];
+          const patch = file.patch || '';
+  
+          if (file.status !== 'modified' && file.status !== 'added') {
+            continue;
+          }
+  
+          if (!patch || patch.length > MAX_PATCH_COUNT) {
+            console.log(
+              `${file.filename} skipped caused by its diff is too large`
+            );
+            continue;
+          }
+          try {
+            const res = await Chat.askQuestion(patch);
+  
+            if (!!res) {
+              await context.octokit.pulls.createReviewComment({
+                repo: repo.repo,
+                owner: repo.owner,
+                pull_number: context.pullRequest().pull_number,
+                commit_id: commits[commits.length - 1].sha,
+                path: file.filename,
+                body: res,
+                position: patch.split('\n').length - 1,
+              });
+            }
+          } catch (e) {
+            console.error(`review ${file.filename} failed`, e);
+          }
+        }
+
       }
   
       if (context.payload.pull_request.title.indexOf('🤖') > -1) {

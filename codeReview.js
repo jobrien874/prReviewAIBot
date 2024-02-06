@@ -1,6 +1,6 @@
 Config = require('./config');
 
-export const createPromptForGpt = () => {
+export const createPromptForGpt = (file) => {
     const config = new Config();
     const prompt = "Here is a code change, please help me by doing a code review of it. Any ";
     let asksConfig = '';
@@ -33,5 +33,5 @@ export const createPromptForGpt = () => {
                 break;
         }
     });
-    return prompt + asksConfig + closingStatement;
+    return prompt + asksConfig + closingStatement + file;
 }

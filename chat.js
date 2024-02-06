@@ -1,4 +1,5 @@
 import { ChatGPTAPI } from 'chatgpt';
+import { createPromptForGpt } from './codeReview';
 
 export class Chat {
   constructor(key) {
@@ -9,7 +10,11 @@ export class Chat {
     return await this.chatGPTAPI.sendMessage(prompt);
   }
 
-  askQuestion = async (prompt) => {
+  askQuestion = async (file) => {
+    if (!file) {
+      return;
+    }
+    const prompt = createPromptForGpt(file);
     const response = await getResponse(prompt);
     return response?.text;
   }
