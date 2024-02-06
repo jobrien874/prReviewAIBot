@@ -13,7 +13,7 @@
     "probot-app"
   ],
   "scripts": {
-    "start": "probot run ./index.js",
+    "start": "probot run ./index.cjs",
     "test": "jest"
   },
   "dependencies": {
