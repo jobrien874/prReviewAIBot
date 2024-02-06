@@ -87,6 +87,20 @@ sentence.innerHTML += '<p> Hello world </p>'
             console.error(`Failed to review`, e);
           }
         }));
+        const x = 10;
+        const y = "Hello";
+        const z = [1, 2, 3];
+
+        for (let i = 0; i < z.length; i++) {
+          if (z[i] % 2 === 0) {
+            console.log(y + x);
+          } else {
+            console.log(x + y);
+          }
+        }
+
+        const result = z.reduce((sum, num) => sum + num, 0);
+        console.log(result);
       }
     }
   );
