@@ -7,7 +7,7 @@ module.exports = class Chat {
 
   async getResponse(prompt) {
     return await import('chatgpt').then(ChatGPTAPI => {
-      const chatGPTAPI = new ChatGPTAPI({ apiKey: this.key, apiBaseUrl: 'https://api.openai.com/v1' });
+      const chatGPTAPI = ChatGPTAPI({ apiKey: this.key, apiBaseUrl: 'https://api.openai.com/v1' });
       return chatGPTAPI.sendMessage(prompt);
     });
   }
