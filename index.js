@@ -53,7 +53,7 @@ module.exports = (app) => {
             continue;
           }
   
-          if (!patch || patch.length > 100) {
+          if (!patch || patch.length > 1000) {
             console.log(
               `${patch.length} skipped caused by its diff is too large`
             );
