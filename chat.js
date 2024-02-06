@@ -1,5 +1,6 @@
-import { ChatGPTAPI } from 'chatgpt';
-import { createPromptForGpt } from './codeReview';
+const { ChatGPTAPI } = require('chatgpt');
+const { createPromptForGpt } = require('./codeReview');
+
 
 export class Chat {
   constructor(key) {
@@ -10,7 +11,7 @@ export class Chat {
     return await this.chatGPTAPI.sendMessage(prompt);
   }
 
-  askQuestion = async (file) => {
+   askQuestion = async (file) => {
     if (!file) {
       return;
     }
