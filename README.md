@@ -9,7 +9,7 @@
 npm install
 
 # Run the bot
-npm start
+npm startasdsdsa
 ```
 
 ## Docker
