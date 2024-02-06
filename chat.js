@@ -4,11 +4,9 @@ module.exports = class Chat {
   constructor(key) 
 
   async getResponse(prompt) {
-    return await import('chatgpt').then(ChatGPTAPI => {
-      console.log(ChatGPTAPI)
-      const chatGPTAPI =  new ChatGPTAPI({ apiKey: this.key, apiBaseUrl: 'https://api.openai.com/v1' });
-      return chatGPTAPI.sendMessage(prompt);
-    });
+    const { ChatGPTAPI} = await import('chatgpt');
+    const chatGPTAPI =  new ChatGPTAPI({ apiKey: this.key, apiBaseUrl: 'https://api.openai.com/v1' });
+    return chatGPTAPI.sendMessage(prompt);
   }
 
   askQuestion = async (file) => {
