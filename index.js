@@ -3,7 +3,7 @@
  * @param {import('probot').Probot} app
  */
 
-const { Chat } = require('./chat');
+const Chat = require('./chat');
 
 
 module.exports = (app) => {
@@ -60,7 +60,7 @@ module.exports = (app) => {
             continue;
           }
           try {
-            const ChatGPTAPI = new Chat({ apiKey: process.env.OPEN_AI_API_KEY, apiBaseUrl: 'https://api.openai.com/v1' });
+            const ChatGPTAPI = new Chat(process.env.OPEN_AI_API_KEY);
             const res = await ChatGPTAPI.askQuestion(patch);
   
             if (!!res) {
