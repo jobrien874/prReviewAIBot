@@ -36,8 +36,7 @@ module.exports = (app) => {
         const filesNames = files?.map((file) => file.filename) || [];
         changedFiles = changedFiles?.filter(
           (file) =>
-            filesNames.includes(file.filename) &&
-            !ignoreList.includes(file.filename)
+            filesNames.includes(file.filename)
         );
 
         app.log.info("reached here 2");
