@@ -1,18 +1,16 @@
 const { createPromptForGpt } = require('./codeReview');
-
+const { ChatGPTAPI } = require('chatgpt');
 module.exports = class Chat {
   constructor(key) {
     this.key = key; 
+    this.chatGPTAPI = new ChatGPTAPI({ apiKey: this.key, apiBaseUrl: 'https://api.openai.com/v1' });
   }
 
   async getResponse(prompt) {
-    const { ChatGPTAPI} = await import('chatgpt');
-    const chatGPTAPI =  new ChatGPTAPI({ apiKey: this.key, apiBaseUrl: 'https://api.openai.com/v1' });
-    console.log(chatGPTAPI)
-    return chatGPTAPI.sendMessage(prompt);
+    return this.chatGPTAPI.sendMessage(prompt);
   }
 
-  askQuestion = async (file) => {
+  async askQuestion(file) {
     if (!file) {
       return;
     }
