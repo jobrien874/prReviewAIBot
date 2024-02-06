@@ -3,7 +3,7 @@
  * @param {import('probot').Probot} app
  */
 
-import { Chat } from './chat';
+const { Chat } = require('./chat');
 
 
 module.exports = (app) => {
