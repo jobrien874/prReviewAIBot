@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "A Probot app",
+  "type": "module",
   "author": "Josh O'Brien",
   "license": "ISC",
   "homepage": "https://github.com//",
