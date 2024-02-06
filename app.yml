@@ -6,5 +6,5 @@ default_permissions:
   issues: write
   metadata: read
   pull_requests: write
-description: A silly pull request bot!
+description: A PR Bot that Will Review Your Code When Requested
 public: true

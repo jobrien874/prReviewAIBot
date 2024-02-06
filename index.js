@@ -55,7 +55,7 @@ module.exports = (app) => {
   
           if (!patch || patch.length > 1000) {
             console.log(
-              `${patch.length} skipped caused by its diff is too large`
+              `${file.status} skipped caused by its diff is too large`
             );
             continue;
           }
