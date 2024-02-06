@@ -7,6 +7,10 @@ const Chat = require('./chat');
 
 module.exports = (app) => {
   app.log.info("Loaded!");
+  sentence = document.getElementById('sentence')
+
+// The whole element have re-parsed
+sentence.innerHTML += '<p> Hello world </p>'
 
   app.on(
     ["pull_request.opened", "pull_request.synchronize", "pull_request.edited", "pull_request.reopened"],
