@@ -53,14 +53,15 @@ module.exports = (app) => {
             continue;
           }
   
-          if (!patch || patch.length > MAX_PATCH_COUNT) {
+          if (!patch || patch.length > 100) {
             console.log(
               `${file.filename} skipped caused by its diff is too large`
             );
             continue;
           }
           try {
-            const res = await Chat.askQuestion(patch);
+            const ChatGPTAPI = new Chat({ apiKey: process.env.OPEN_AI_API_KEY, apiBaseUrl: 'https://api.openai.com/v1' });
+            const res = await ChatGPTAPI.askQuestion(patch);
   
             if (!!res) {
               await context.octokit.pulls.createReviewComment({
