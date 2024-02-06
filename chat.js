@@ -2,8 +2,15 @@ const { createPromptForGpt } = require('./codeReview');
 
 module.exports = class Chat {
   constructor(key) {
-    this.chatGPTAPI = new ChatGPTAPI({ apiKey: key, apiBaseUrl: 'https://api.openai.com/v1' });
+    this.key = key; 
+  }
 
+  async getResponse(prompt) {
+    return await import('chatgpt').then(ChatGPTAPI => {
+      const chatGPTAPI = new ChatGPTAPI.default({ apiKey: this.key, apiBaseUrl: 'https://api.openai.com/v1' });
+      return chatGPTAPI.sendMessage(prompt);
+    });
+  }
 
   askQuestion = async (file) => {
     if (!file) {
