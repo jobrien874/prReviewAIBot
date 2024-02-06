@@ -1,9 +1,7 @@
 const { createPromptForGpt } = require('./codeReview');
 
 module.exports = class Chat {
-  constructor(key) {
-    this.key = key; 
-  }
+  constructor(key) 
 
   async getResponse(prompt) {
     return await import('chatgpt').then(ChatGPTAPI => {
