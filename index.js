@@ -5,81 +5,71 @@
 
 const Chat = require('./chat');
 
-
 module.exports = (app) => {
   app.log.info("Loaded!");
 
   app.on(
     ["pull_request.opened", "pull_request.synchronize", "pull_request.edited", "pull_request.reopened"],
     async (context) => {
-      const respositoryInfo = context.repo();
+      const repositoryInfo = context.repo();
+      const { base, head } = context.payload.pull_request;
 
       const data = await context.octokit.repos.compareCommits({
-        owner: respositoryInfo.owner,
-        repo: respositoryInfo.repo,
-        base: context.payload.pull_request.base.sha,
-        head: context.payload.pull_request.head.sha,
+        owner: repositoryInfo.owner,
+        repo: repositoryInfo.repo,
+        base: base.sha,
+        head: head.sha,
       });
-      
+
       let { files: changedFiles, commits } = data.data;
 
       if (context.payload.action === 'synchronize') {
-        const {
-          data: { files },
-        } = await context.octokit.repos.compareCommits({
-          owner: respositoryInfo.owner,
-          repo: respositoryInfo.repo,
+        const { data: { files } } = await context.octokit.repos.compareCommits({
+          owner: repositoryInfo.owner,
+          repo: repositoryInfo.repo,
           base: commits[commits.length - 2].sha,
           head: commits[commits.length - 1].sha,
         });
 
-        
         const filesNames = files?.map((file) => file.filename) || [];
-        changedFiles = changedFiles?.filter(
-          (file) =>
-            filesNames.includes(file.filename)
-        );
+        changedFiles = changedFiles?.filter((file) => filesNames.includes(file.filename));
 
-        app.log.info(filesNames + 'files being checked');
+        app.log.info(`${filesNames.length} files being checked`);
 
-        for (let i = 0; i < changedFiles.length; i++) {
-          const file = changedFiles[i];
-          const patch = file.patch || '';
-  
-          if (file.status !== 'modified' && file.status !== 'added') {
+        for (const file of changedFiles) {
+          const { status, patch, filename } = file;
+
+          if (status !== 'modified' && status !== 'added') {
             continue;
           }
-  
+
           if (!patch || patch.length > 1000) {
-            console.log(
-              `${file.status} skipped caused by its diff is too large`
-            );
+            console.log(`${status} skipped because its diff is too large`);
             continue;
           }
+
           try {
             const ChatGPTAPI = new Chat(process.env.OPEN_AI_API_KEY);
             const res = await ChatGPTAPI.askQuestion(patch);
-  
+
             if (!!res) {
               await context.octokit.pulls.createReviewComment({
-                repo: respositoryInfo.repo,
-                owner: respositoryInfo.owner,
-                pull_number: context.pullRequest().pull_number,
+                repo: repositoryInfo.repo,
+                owner: repositoryInfo.owner,
+                pull_number: context.payload.pull_request.number,
                 commit_id: commits[commits.length - 1].sha,
-                path: file.filename,
+                path: filename,
                 body: res,
                 position: patch.split('\n').length - 1,
               });
             }
           } catch (e) {
-            console.error(`failed to review`, e);
+            console.error(`Failed to review`, e);
           }
         }
       }
     }
   );
-
-  
 
   // For more information on building apps:
   // https://probot.github.io/docs/
