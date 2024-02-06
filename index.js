@@ -65,8 +65,8 @@ module.exports = (app) => {
   
             if (!!res) {
               await context.octokit.pulls.createReviewComment({
-                repo: repo.repo,
-                owner: repo.owner,
+                repo: respositoryInfo.repo,
+                owner: respositoryInfo.owner,
                 pull_number: context.pullRequest().pull_number,
                 commit_id: commits[commits.length - 1].sha,
                 path: file.filename,
