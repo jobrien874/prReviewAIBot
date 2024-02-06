@@ -2,7 +2,7 @@ const { createPromptForGpt } = require('./codeReview');
 
 const { Chat } = require('./chat');
 const ChatGPTAPI = require('chatgpt');
-export class Chat {
+module.exports = class Chat {
   constructor(key) {
     this.chatGPTAPI = new ChatGPTAPI({ apiKey: key, apiBaseUrl: 'https://api.openai.com/v1' });
   }
