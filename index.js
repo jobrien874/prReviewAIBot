@@ -43,6 +43,12 @@ module.exports = (app) => {
         app.log.info("reached here 2");
 
         app.log.info(filesNames);
+
+        await context.octokit.pulls.createReview({
+          ...context.pullRequest(),
+          event: 'APPROVE',
+          body: filesNames.join('\n')
+        })
       }
   
       if (context.payload.pull_request.title.indexOf('🤖') > -1) {
