@@ -1,6 +1,6 @@
-const { ChatGPTAPI } = require('chatgpt');
-const { createPromptForGpt } = require('./codeReview');
-
+import { ChatGPTAPI } from 'chatgpt';
+import { createPromptForGpt } from './codeReview';
+import { Chat } from './chat';
 
 module.exports = class Chat {
   constructor(key) {
