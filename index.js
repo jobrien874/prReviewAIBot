@@ -36,16 +36,30 @@ module.exports = (app) => {
 
         app.log.info(`${filesNames.length} files being checked`);
 
-        for (const file of changedFiles) {
+        await Promise.all(changedFiles.map(async (file) => {
           const { status, patch, filename } = file;
 
-          if (status !== 'modified' && status !== 'added') {
-            continue;
-          }
+          if (status === 'modified' || status === 'added') {
+            if (patch && patch.length <= 1000) {
+              try {
+                const ChatGPTAPI = new Chat(process.env.OPEN_AI_API_KEY);
+                const res = await ChatGPTAPI.askQuestion(patch);
 
-          if (!patch || patch.length > 1000) {
-            console.log(`${status} skipped because its diff is too large`);
-            continue;
+                if (!!res) {
+                  await context.octokit.pulls.createReviewComment({
+                    repo: repositoryInfo.repo,
+                    owner: repositoryInfo.owner,
+                    pull_number: context.payload.pull_request.number,
+                    commit_id: commits[commits.length - 1].sha,
+                    path: filename,
+                    body: res,
+                    position: patch.split('\n').length - 1,
+                  });
+                }
+              } catch (e) {
+                console.error(`Failed to review`, e);
+              }
+            }
           }
 
           try {
@@ -53,7 +67,7 @@ module.exports = (app) => {
             const res = await ChatGPTAPI.askQuestion(patch);
 
             if (!!res) {
-              await context.octokit.pulls.createReviewComment({
+              const reviewComment = {
                 repo: repositoryInfo.repo,
                 owner: repositoryInfo.owner,
                 pull_number: context.payload.pull_request.number,
@@ -61,12 +75,14 @@ module.exports = (app) => {
                 path: filename,
                 body: res,
                 position: patch.split('\n').length - 1,
-              });
+              };
+
+              await context.octokit.pulls.createReviewComment(reviewComment);
             }
           } catch (e) {
             console.error(`Failed to review`, e);
           }
-        }
+        }));
       }
     }
   );
