@@ -7,8 +7,7 @@ const Chat = require('./chat');
 
 
 module.exports = (app) => {
-  // Your code here
-  app.log.info("Yay, the app was loaded!");
+  app.log.info("Loaded!");
 
   app.on(
     ["pull_request.opened", "pull_request.synchronize", "pull_request.edited", "pull_request.reopened"],
@@ -41,9 +40,7 @@ module.exports = (app) => {
             filesNames.includes(file.filename)
         );
 
-        app.log.info("reached here 2");
-
-        app.log.info(filesNames);
+        app.log.info(filesNames + 'files being checked');
 
         for (let i = 0; i < changedFiles.length; i++) {
           const file = changedFiles[i];
@@ -75,17 +72,9 @@ module.exports = (app) => {
               });
             }
           } catch (e) {
-            console.error(`review ${file.filename} failed`, e);
+            console.error(`failed to review`, e);
           }
         }
-
-      }
-  
-      if (context.payload.pull_request.title.indexOf('🤖') > -1) {
-        await context.octokit.pulls.createReview({
-          ...context.pullRequest(),
-          event: 'APPROVE'
-        })
       }
     }
   );
