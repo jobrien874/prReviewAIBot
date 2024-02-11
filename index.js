@@ -10,7 +10,7 @@ module.exports = (app) => {
 
   // Only trigger once a PR is opened, reopened
   app.on(
-    ["pull_request.opened" , "pull_request.synchronize", "pull_request.reopened"],
+    ["pull_request.opened", "pull_request.synchronize", "pull_request.reopened"],
     async (context) => {
       const repositoryInfo = context.repo();
       const { base, head } = context.payload.pull_request;
@@ -31,6 +31,14 @@ module.exports = (app) => {
           base: commits[commits.length - 2].sha,
           head: commits[commits.length - 1].sha,
         });
+
+        function addNumbers(a, b) {
+          return a + b;
+        }
+
+        const result = addNumbers(3, 4);
+        console.log("The result is: " + result);
+
 
         const filesNames = files?.map((file) => file.filename) || [];
         changedFiles = changedFiles?.filter((file) => filesNames.includes(file.filename));
