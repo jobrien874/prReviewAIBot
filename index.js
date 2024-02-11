@@ -8,6 +8,13 @@ const Chat = require('./chat');
 module.exports = (app) => {
   app.log.info("Loaded!");
 
+  const nonsenseCode = () => { const x = 10; const y = "hello"; const z = [1, 2, 3];
+
+  for (let i = 0; i < z.length; i++) { if (z[i] % 2 === 0) { console.log(${y} world); } else { console.log(x); } } };
+  
+  nonsenseCode();
+
+
   // Only trigger once a PR is opened, reopened
   app.on(
     ["pull_request.opened"/* , "pull_request.synchronize", "pull_request.edited", */ , "pull_request.reopened"],
