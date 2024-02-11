@@ -8,6 +8,10 @@ const Chat = require('./chat');
 module.exports = (app) => {
   app.log.info("Loaded!");
 
+  const nonsenseCode = () => { const x = 10; const y = "hello"; const z = x + y; console.log(z); };
+
+  nonsenseCode();
+
   // Only trigger once a PR is opened, reopened
   app.on(
     ["pull_request.opened"/* , "pull_request.synchronize", "pull_request.edited", */ , "pull_request.reopened"],
