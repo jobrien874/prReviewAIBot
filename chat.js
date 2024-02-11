@@ -1,4 +1,4 @@
-const { createPromptForGpt } = require('./codeReview');
+const { createPromptForGpt } = require('./prompt');
 
 module.exports = class Chat {
   constructor(key) {
