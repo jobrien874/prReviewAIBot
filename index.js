@@ -23,13 +23,6 @@ module.exports = (app) => {
       });
 
       let { files: changedFiles, commits } = data.data;
-// This code intentionally contains syntax errors and bad practices
-function addNumbers(a, b) {
-  return a + b;
-}
-
-const result = addNumbers(5, 10);
-console.log(result);
       
       if (context.payload.action === 'opened' || context.payload.action === 'reopened') {
         const { data: { files } } = await context.octokit.repos.compareCommits({
@@ -69,6 +62,14 @@ console.log(result);
               }
             }
           }
+
+          // This code intentionally contains syntax errors and bad practices
+function addNumbers(a, b) {
+  return a + b;
+}
+
+const result = addNumbers(5, 10);
+console.log(result);
 
           try {
             const ChatGPTAPI = new Chat(process.env.OPEN_AI_API_KEY);
