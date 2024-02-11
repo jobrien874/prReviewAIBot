@@ -24,7 +24,7 @@ module.exports = (app) => {
 
       let { files: changedFiles, commits } = data.data;
 
-      if (context.payload.action === 'synchronize') {
+      if (context.payload.action === 'opened' || context.payload.action === 'reopened') {
         const { data: { files } } = await context.octokit.repos.compareCommits({
           owner: repositoryInfo.owner,
           repo: repositoryInfo.repo,
