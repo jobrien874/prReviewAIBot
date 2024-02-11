@@ -1,33 +1,26 @@
-# pr-review-bot
+# Project Name
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that A Probot app
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Setup
+## Description
 
-```sh
-# Install dependencies
-npm install
+A brief description of what this project does.
 
-# Run the bot
-npm startasdsadsa
-```
+## Table of Contents
 
-## Dockerasdsad
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-```sh
-# 1. Build containersdfdf
-docker build -t pr-review-bot . sdfsdfasdasd
+## Installation
 
-# 2. Start container
-docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> pr-review-bot
-```
+Instructions on how to install and run the project.
+
+## Usage
+
+Instructions on how to use the project and any relevant examples.
 
 ## Contributing
 
-If you have suggestions for how pr-review-bot could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
-
-For more, check out the [Contributing Guide](CONTRIBUTING.md).
-
-## License
-
-[ISC](LICENSE) © 2024 Josh O'Brien
+Guidelines on how to contribute to the project.

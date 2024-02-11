@@ -12,8 +12,9 @@ module.exports = (app) => {
 // The whole element have re-parsed
 sentence.innerHTML += '<p> Hello world </p>'
 
+  // Only trigger once a PR is opened, reopened
   app.on(
-    ["pull_request.opened", "pull_request.synchronize", "pull_request.edited", "pull_request.reopened"],
+    ["pull_request.opened"/* , "pull_request.synchronize", "pull_request.edited", */ , "pull_request.reopened"],
     async (context) => {
       const repositoryInfo = context.repo();
       const { base, head } = context.payload.pull_request;
@@ -44,7 +45,7 @@ sentence.innerHTML += '<p> Hello world </p>'
           const { status, patch, filename } = file;
 
           if (status === 'modified' || status === 'added') {
-            if (patch && patch.length <= 1000) {
+            if (patch && patch.length <= 3000) {
               try {
                 const ChatGPTAPI = new Chat(process.env.OPEN_AI_API_KEY);
                 const res = await ChatGPTAPI.askQuestion(patch);
@@ -104,10 +105,4 @@ sentence.innerHTML += '<p> Hello world </p>'
       }
     }
   );
-
-  // For more information on building apps:
-  // https://probot.github.io/docs/
-
-  // To get your app running against GitHub, see:
-  // https://probot.github.io/docs/development/
 };
