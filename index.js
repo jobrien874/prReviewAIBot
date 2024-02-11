@@ -8,9 +8,8 @@ const Chat = require('./chat');
 module.exports = (app) => {
   app.log.info("Loaded!");
 
-  // Only trigger once a PR is opened, reopened
   app.on(
-    ["pull_request.opened" , "pull_request.synchronize", "pull_request.reopened"],
+    ["pull_request.opened", "pull_request.synchronize", "pull_request.edited", "pull_request.reopened"],
     async (context) => {
       const repositoryInfo = context.repo();
       const { base, head } = context.payload.pull_request;
@@ -24,7 +23,7 @@ module.exports = (app) => {
 
       let { files: changedFiles, commits } = data.data;
 
-      if (context.payload.action === 'opened' || context.payload.action === 'reopened') {
+      if (context.payload.action === 'synchronize') {
         const { data: { files } } = await context.octokit.repos.compareCommits({
           owner: repositoryInfo.owner,
           repo: repositoryInfo.repo,
@@ -37,30 +36,16 @@ module.exports = (app) => {
 
         app.log.info(`${filesNames.length} files being checked`);
 
-        await Promise.all(changedFiles.map(async (file) => {
+        for (const file of changedFiles) {
           const { status, patch, filename } = file;
 
-          if (status === 'modified' || status === 'added') {
-            if (patch && patch.length <= 3000) {
-              try {
-                const ChatGPTAPI = new Chat(process.env.OPEN_AI_API_KEY);
-                const res = await ChatGPTAPI.askQuestion(patch);
+          if (status !== 'modified' && status !== 'added') {
+            continue;
+          }
 
-                if (!!res) {
-                  await context.octokit.pulls.createReviewComment({
-                    repo: repositoryInfo.repo,
-                    owner: repositoryInfo.owner,
-                    pull_number: context.payload.pull_request.number,
-                    commit_id: commits[commits.length - 1].sha,
-                    path: filename,
-                    body: res,
-                    position: patch.split('\n').length - 1,
-                  });
-                }
-              } catch (e) {
-                console.error(`Failed to review`, e);
-              }
-            }
+          if (!patch || patch.length > 1000) {
+            console.log(`${status} skipped because its diff is too large`);
+            continue;
           }
 
           try {
@@ -68,7 +53,7 @@ module.exports = (app) => {
             const res = await ChatGPTAPI.askQuestion(patch);
 
             if (!!res) {
-              const reviewComment = {
+              await context.octokit.pulls.createReviewComment({
                 repo: repositoryInfo.repo,
                 owner: repositoryInfo.owner,
                 pull_number: context.payload.pull_request.number,
@@ -76,15 +61,19 @@ module.exports = (app) => {
                 path: filename,
                 body: res,
                 position: patch.split('\n').length - 1,
-              };
-
-              await context.octokit.pulls.createReviewComment(reviewComment);
+              });
             }
           } catch (e) {
             console.error(`Failed to review`, e);
           }
-        }));
+        }
       }
     }
   );
+
+  // For more information on building apps:
+  // https://probot.github.io/docs/
+
+  // To get your app running against GitHub, see:
+  // https://probot.github.io/docs/development/
 };
