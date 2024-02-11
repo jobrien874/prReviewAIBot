@@ -10,7 +10,7 @@ module.exports = (app) => {
 
   // Only trigger once a PR is opened, reopened
   app.on(
-    ["pull_request.opened"/* , "pull_request.synchronize", "pull_request.edited", */ , "pull_request.reopened"],
+    ["pull_request.opened", "pull_request.synchronize", "pull_request.reopened"],
     async (context) => {
       const repositoryInfo = context.repo();
       const { base, head } = context.payload.pull_request;
